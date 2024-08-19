@@ -1,0 +1,2 @@
+HTMLikeStr = str
+FileNameLikeStr = str
