@@ -2,7 +2,6 @@
 
 ### TODO
 - env
-- lint: mypy, flake8, isort
+- lint: mypy
 - docker, docker compose
-- gitignore
-- docstr
+- import linter (https://github.com/seddonym/import-linter)
