@@ -2,11 +2,9 @@ import asyncio
 from typing import NoReturn
 
 from aiogram import Bot, Dispatcher
-from aiogram.client.default import DefaultBotProperties
-from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 
-from config import BOT_TOKEN, BOT_PROPERTIES
+from config import BOT_PROPERTIES, BOT_TOKEN
 from dto.message import TelegramMessage
 from src.render.render import CommandHTMLRender, MessageHTMLRender
 from src.types.entity.user import SenderUser
