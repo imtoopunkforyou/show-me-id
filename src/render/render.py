@@ -4,11 +4,11 @@ from typing import Union
 from jinja2 import Environment
 from jinja2.environment import Template
 
-from src.config import RENDER_ENVIROMENT
-from src.exceptions.exceptions import RenderDTOError
-from src.types.entity.public import AbstractPublicEntity
-from src.types.entity.user import AbstractUser, SenderUser
-from src.types.types import FileNameLikeStr, HTMLikeStr
+from config import RENDER_ENVIROMENT
+from exceptions.exceptions import RenderDTOError
+from dto.entity.public import AbstractPublicEntity
+from dto.entity.user import AbstractUser, SenderUser
+from render.types import FileNameLikeStr, HTMLikeStr
 
 
 class AbstractHTMLRender(ABC):

@@ -6,9 +6,9 @@ from aiogram.filters import CommandStart
 
 from config import BOT_PROPERTIES, BOT_TOKEN
 from dto.message import TelegramMessage
-from src.render.render import CommandHTMLRender, MessageHTMLRender
-from src.types.entity.user import SenderUser
-from src.types.original import OriginalMessage
+from render.render import CommandHTMLRender, MessageHTMLRender
+from dto.entity.user import SenderUser
+from dto.original import OriginalMessage
 
 dp = Dispatcher()
 

@@ -2,15 +2,15 @@ from typing import Union
 
 from aiogram.enums.message_origin_type import MessageOriginType
 
-from src.exceptions.exceptions import MessageDefinitionError
-from src.types.entity.public import AbstractPublicEntity, Channel, Chat
-from src.types.entity.user import (
+from exceptions.exceptions import MessageDefinitionError
+from dto.entity.public import AbstractPublicEntity, Channel, Chat
+from dto.entity.user import (
     AbstractUser,
     ForwardUser,
     HiddenUser,
     SenderUser,
 )
-from src.types.original import OriginalMessage, OriginalUser
+from dto.original import OriginalMessage, OriginalUser
 
 
 class BaseTelegramMessage():
