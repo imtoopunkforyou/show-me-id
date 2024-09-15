@@ -1,20 +1,18 @@
 import asyncio
-from typing import NoReturn
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
 
 from config import BOT_PROPERTIES, BOT_TOKEN
 from dto.message import TelegramMessage
-from render.render import CommandHTMLRender, MessageHTMLRender
-from dto.entity.user import SenderUser
 from dto.original import OriginalMessage
+from render.render import CommandHTMLRender, MessageHTMLRender
 
 dp = Dispatcher()
 
 
 @dp.message(CommandStart())
-async def command_start_handler(message: OriginalMessage) -> NoReturn:
+async def command_start_handler(message: OriginalMessage) -> None:
     """
     Command handler `/start`.
 
@@ -23,14 +21,14 @@ async def command_start_handler(message: OriginalMessage) -> NoReturn:
     :param message: message from user.
     :type message: OriginalMessage
     """
-    dto: SenderUser = TelegramMessage(message).dto
-    rendered_template = CommandHTMLRender(dto).execute()
+    msg = TelegramMessage(message)
+    rendered_template = CommandHTMLRender(msg.dto).execute()
 
     await message.answer(rendered_template)
 
 
 @dp.message()
-async def show_id(message: OriginalMessage) -> NoReturn:
+async def show_id(message: OriginalMessage) -> None:
     """
     Handler for all incoming messages.
 
@@ -39,13 +37,13 @@ async def show_id(message: OriginalMessage) -> NoReturn:
     :param message: message from user
     :type message: OriginalMessage
     """
-    dto = TelegramMessage(message).dto
-    rendered_template = MessageHTMLRender(dto).execute()
+    msg = TelegramMessage(message)
+    rendered_template = MessageHTMLRender(msg.dto).execute()
 
     await message.reply(rendered_template)
 
 
-async def main() -> NoReturn:
+async def main() -> None:
     """Entry point to the application."""
     bot = Bot(
         token=BOT_TOKEN,

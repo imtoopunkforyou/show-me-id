@@ -1,4 +1,5 @@
 from abc import ABC
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -16,7 +17,7 @@ class AbstractPublicEntity(BaseModel, ABC):
     """
 
     id: int
-    title: str
+    title: Optional[str] = None
 
 
 class Chat(AbstractPublicEntity):

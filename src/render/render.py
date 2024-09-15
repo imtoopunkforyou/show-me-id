@@ -1,23 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Optional, Union
 
 from jinja2 import Environment
 from jinja2.environment import Template
 
 from config import RENDER_ENVIROMENT
-from exceptions.exceptions import RenderDTOError
 from dto.entity.public import AbstractPublicEntity
-from dto.entity.user import AbstractUser, SenderUser
-from render.types import FileNameLikeStr, HTMLikeStr
+from dto.entity.user import AbstractUser
+from exceptions.exceptions import RenderDTOError
+from render.types import FileNameLikeStr, HTMLikeStr, TemplateMessageKwargs
 
 
 class AbstractHTMLRender(ABC):
-    """
-    Converts DTO object to html message.
-
-    :param ABC: _description_
-    :type ABC: _type_
-    """
+    """Converts DTO object to html message."""
 
     def __init__(self, dto: Union[AbstractPublicEntity, AbstractUser]):
         self.dto = dto
@@ -80,16 +75,16 @@ class MessageHTMLRender(AbstractHTMLRender):
         :return: html message.
         :rtype: HTMLikeStr
         """
-        template: Template = None
-        template_kwargs: dict[str, Union[str, int, bool]] = None
+        template: Optional[Template] = None
+        template_kwargs: Optional[TemplateMessageKwargs] = None
 
         if self.is_user:
             template = self._get_template_obj(self._user_template_filename)
             template_kwargs = {
                 'id': self.dto.id,
-                'name': self.dto.full_name,
-                'username': self.dto.at_sign_username,
-                'is_premium': self.dto.is_premium,
+                'name': self.dto.full_name,  # type: ignore [union-attr]
+                'username': self.dto.at_sign_username,  # type: ignore
+                'is_premium': self.dto.is_premium,  # type: ignore [union-attr]
             }
         elif self.is_public_entity:
             template = self._get_template_obj(
@@ -97,10 +92,10 @@ class MessageHTMLRender(AbstractHTMLRender):
             )
             template_kwargs = {
                 'id': self.dto.id,
-                'title': self.dto.title,
+                'title': self.dto.title,  # type: ignore [union-attr]
             }
 
-        if not template:
+        if not template or not template_kwargs:
             raise RenderDTOError
 
         return template.render(**template_kwargs)
@@ -131,7 +126,10 @@ class CommandHTMLRender(AbstractHTMLRender):
 
     _start_template_filename: str = 'start'
 
-    def __init__(self, dto: SenderUser):
+    def __init__(
+        self,
+        dto: Union[AbstractPublicEntity, AbstractUser],
+    ):
         super().__init__(dto=dto)
 
     def execute(self) -> HTMLikeStr:
@@ -143,14 +141,16 @@ class CommandHTMLRender(AbstractHTMLRender):
         :return: html message.
         :rtype: HTMLikeStr
         """
-        template: Template = None
-        template_kwargs: dict[str, Union[str, int, bool]] = None
+        template: Optional[Template] = None
+        template_kwargs: Optional[TemplateMessageKwargs] = None
 
         if self.is_user:
             template = self._get_template_obj(self._start_template_filename)
-            template_kwargs = {'full_name': self.dto.full_name}
+            template_kwargs = {
+                'full_name': self.dto.full_name,  # type: ignore [union-attr]
+            }
 
-        if not template:
+        if not template or not template_kwargs:
             raise RenderDTOError
 
         return template.render(**template_kwargs)

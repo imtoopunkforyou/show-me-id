@@ -1,16 +1,11 @@
-from typing import Union
+from typing import Type, Union
 
 from aiogram.enums.message_origin_type import MessageOriginType
 
-from exceptions.exceptions import MessageDefinitionError
 from dto.entity.public import AbstractPublicEntity, Channel, Chat
-from dto.entity.user import (
-    AbstractUser,
-    ForwardUser,
-    HiddenUser,
-    SenderUser,
-)
-from dto.original import OriginalMessage, OriginalUser
+from dto.entity.user import AbstractUser, ForwardUser, SenderUser
+from dto.original import OriginalChat, OriginalMessage, OriginalUser
+from exceptions.exceptions import MessageDefinitionError
 
 
 class BaseTelegramMessage():
@@ -20,7 +15,10 @@ class BaseTelegramMessage():
     Describes the general properties of a telegram message.
     """
 
-    def __init__(self, message: OriginalMessage):
+    def __init__(
+        self,
+        message: OriginalMessage,
+    ):
         self.message = message
 
     def is_forward_user(self) -> bool:
@@ -33,7 +31,7 @@ class BaseTelegramMessage():
                  Otherwise False.
         :rtype: bool
         """
-        if self._is_forward():
+        if self.message.forward_origin:
             return (
                 self.message.forward_origin.type
                 == MessageOriginType.USER.value
@@ -46,12 +44,13 @@ class BaseTelegramMessage():
         Checking if the user profile is hidden (privacy settings).
 
         It is assumed that the message has been forwarded.
+        No user information will be provided.
 
         :return: True if the user profile is hidden.
                  Otherwise False.
         :rtype: bool
         """
-        if self._is_forward():
+        if self.message.forward_origin:
             return (
                 self.message.forward_origin.type
                 == MessageOriginType.HIDDEN_USER.value
@@ -69,7 +68,7 @@ class BaseTelegramMessage():
                  Otherwise False.
         :rtype: bool
         """
-        if self._is_forward():
+        if self.message.forward_origin:
             return (
                 self.message.forward_origin.type
                 == MessageOriginType.CHAT.value
@@ -87,7 +86,7 @@ class BaseTelegramMessage():
                  Otherwise False.
         :rtype: bool
         """
-        if self._is_forward():
+        if self.message.forward_origin:
             return (
                 self.message.forward_origin.type
                 == MessageOriginType.CHANNEL.value
@@ -103,20 +102,10 @@ class BaseTelegramMessage():
                  Otherwise False.
         :rtype: bool
         """
-        if not self._is_forward() and self.message.from_user:
+        if not self.message.forward_origin and self.message.from_user:
             return isinstance(self.message.from_user, OriginalUser)
 
         return False
-
-    def _is_forward(self) -> bool:
-        """
-        Shows whether a message belongs to its author.
-
-        :return: True if `self.message` does not belong to the author.
-                 Otherwise False.
-        :rtype: bool
-        """
-        return bool(self.message.forward_origin)
 
 
 class TelegramMessage(BaseTelegramMessage):
@@ -129,18 +118,16 @@ class TelegramMessage(BaseTelegramMessage):
     :type BaseTelegramMessage: dto.base.BaseTelegramMessage
     """
 
-    _sender_user: SenderUser = SenderUser
-    _channel: Channel = Channel
-    _chat: Chat = Chat
-    _hidden_user: HiddenUser = HiddenUser
-    _forward_user: ForwardUser = ForwardUser
+    _sender_user: Type[SenderUser] = SenderUser
+    _channel: Type[Channel] = Channel
+    _chat: Type[Chat] = Chat
+    _forward_user: Type[ForwardUser] = ForwardUser
 
     def __init__(self, message: OriginalMessage):
         super().__init__(message=message)
-        self._dto: Union[AbstractPublicEntity, AbstractUser, None] = ...
 
     @property
-    def dto(self) -> Union[AbstractPublicEntity, AbstractUser, None]:
+    def dto(self) -> Union[AbstractPublicEntity, AbstractUser]:
         """
         Telegram message in the required format.
 
@@ -150,11 +137,7 @@ class TelegramMessage(BaseTelegramMessage):
         :return: Data Transport Object.
         :rtype: Union[AbstractPublicEntity, AbstractUser, None]
         """
-        self._dto: Union[
-            AbstractPublicEntity,
-            AbstractUser,
-            None,
-        ] = self._create_dto_object()
+        self._dto: Union[AbstractPublicEntity, AbstractUser, None] = self._create_dto_object()
 
         if not self._dto:
             raise MessageDefinitionError
@@ -164,39 +147,34 @@ class TelegramMessage(BaseTelegramMessage):
     def _create_dto_object(
         self,
     ) -> Union[AbstractPublicEntity, AbstractUser, None]:
-        dto = None
-        original_forward_message = self.message.forward_origin
-        original_user = self.message.from_user
-
         if self.is_forward_user():
-            dto: ForwardUser = self._forward_user(
-                id=original_forward_message.sender_user.id,
-                is_bot=original_forward_message.sender_user.is_bot,
-                first_name=original_forward_message.sender_user.first_name,
-                last_name=original_forward_message.sender_user.last_name,
-                username=original_forward_message.sender_user.username,
-                is_premium=original_forward_message.sender_user.is_premium,
-            )
-
-        if self.is_hidden_user():
-            dto: HiddenUser = self._hidden_user(
-                first_name=original_forward_message.sender_user_name,
+            user: OriginalUser = self.message.forward_origin.sender_user  # type: ignore [union-attr]
+            return self._forward_user(
+                id=user.id,
+                is_bot=user.is_bot,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                username=user.username,
+                is_premium=user.is_premium,
             )
 
         if self.is_chat():
-            dto: Chat = self._chat(
-                id=original_forward_message.sender_chat.id,
-                title=original_forward_message.sender_chat.title,
+            chat: OriginalChat = self.message.forward_origin.sender_chat  # type: ignore [union-attr]
+            return self._chat(
+                id=chat.id,
+                title=chat.title,
             )
 
         if self.is_channel():
-            dto: Channel = self._channel(
-                id=original_forward_message.chat.id,
-                title=original_forward_message.chat.title,
+            channel: OriginalChat = self.message.forward_origin.chat  # type: ignore [union-attr]
+            return self._channel(
+                id=channel.id,
+                title=channel.title,
             )
 
         if self.is_sender_user():
-            dto: SenderUser = self._sender_user(
+            original_user: OriginalUser = self.message.from_user  # type: ignore [assignment]
+            return self._sender_user(
                 id=original_user.id,
                 is_bot=original_user.is_bot,
                 first_name=original_user.first_name,
@@ -205,4 +183,4 @@ class TelegramMessage(BaseTelegramMessage):
                 is_premium=original_user.is_premium,
             )
 
-        return dto
+        return None

@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional, Union
+from typing import Optional, Self, Union
 
 from pydantic import BaseModel, field_validator
 
@@ -25,7 +25,7 @@ class AbstractUser(BaseModel, ABC):
     is_bot: bool = False
 
     @property
-    def at_sign_username(self) -> str:
+    def at_sign_username(self: Self) -> Union[str, None]:
         """Username format like `@username`."""
         if self.username:
             at_sign = '@'
@@ -48,15 +48,6 @@ class AbstractUser(BaseModel, ABC):
     @classmethod
     def _none_to_false(cls, premium_value: Union[bool, None]) -> bool:
         return False if premium_value is None else premium_value
-
-
-class HiddenUser(AbstractUser):
-    """
-    Hidden telegram user (privacy settings).
-
-    :param AbstractUser: Telegram user.
-    :type AbstractUser: pydantic._internal._model_construction.ModelMetaclass.
-    """
 
 
 class SenderUser(AbstractUser):
