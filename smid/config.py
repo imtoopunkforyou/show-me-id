@@ -8,7 +8,7 @@ BOT_PROPERTIES = DefaultBotProperties(
 )
 
 RENDER_ENVIROMENT: Environment = Environment(
-    loader=PackageLoader('src'),
+    loader=PackageLoader('smid'),
     autoescape=select_autoescape(
         (
             'html',
