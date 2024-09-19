@@ -1,13 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Union
 
-from jinja2 import Environment
-from jinja2.environment import Template
-
 from config import RENDER_ENVIROMENT
 from dto.entity.public import AbstractPublicEntity
 from dto.entity.user import AbstractUser
 from exceptions.exceptions import RenderDTOError
+from jinja2 import Environment
+from jinja2.environment import Template
 from render.types import FileNameLikeStr, HTMLikeStr, TemplateMessageKwargs
 
 

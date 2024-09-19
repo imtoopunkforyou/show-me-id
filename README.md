@@ -1,7 +1,9 @@
 ヽ(ー_ー )ノ
 
 ### TODO
-- env
-- lint: mypy
+- exceptions to local packages
 - docker, docker compose
-- import linter (https://github.com/seddonym/import-linter)
+- logs
+
+<code> docker build . --tag temp_smid && docker run --env-file .env temp_smid</code>
+

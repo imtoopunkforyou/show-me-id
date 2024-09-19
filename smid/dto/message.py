@@ -1,7 +1,6 @@
 from typing import Type, Union
 
 from aiogram.enums.message_origin_type import MessageOriginType
-
 from dto.entity.public import AbstractPublicEntity, Channel, Chat
 from dto.entity.user import AbstractUser, ForwardUser, SenderUser
 from dto.original import OriginalChat, OriginalMessage, OriginalUser

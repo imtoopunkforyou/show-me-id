@@ -2,7 +2,6 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-
 from config import BOT_PROPERTIES, BOT_TOKEN
 from dto.message import TelegramMessage
 from dto.original import OriginalMessage
