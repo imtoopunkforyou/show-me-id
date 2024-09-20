@@ -1,8 +1,10 @@
 import asyncio
+import logging
+import sys
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from config import BOT_PROPERTIES, BOT_TOKEN
+from config import BOT_PROPERTIES, BOT_TOKEN, LOGS_ENABLE
 from dto.message import TelegramMessage
 from dto.original import OriginalMessage
 from render.render import CommandHTMLRender, MessageHTMLRender
@@ -53,4 +55,10 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
+    if LOGS_ENABLE:
+        logging.basicConfig(
+            level=logging.INFO,
+            stream=sys.stdout,
+        )
+
     asyncio.run(main())

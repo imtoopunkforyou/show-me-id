@@ -3,7 +3,7 @@
 ### TODO
 - exceptions to local packages
 - docker, docker compose
-- logs
+- Makefile
 
 <code> docker build . --tag temp_smid && docker run --env-file .env temp_smid</code>
 

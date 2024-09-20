@@ -2,4 +2,4 @@
 echo '===================='
 echo 'Launching the bot...'
 echo '===================='
-python __main__.py
+python $PROJECT_PATH/__main__.py

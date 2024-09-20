@@ -11,6 +11,8 @@ TEMPLATES_DIR: str = '{base_dir}/templates/'.format(
     base_dir=BASE_DIR,
 )
 
+LOGS_ENABLE: bool = cast(bool, os.getenv('LOGS_ENABLE'))
+
 BOT_TOKEN: str = cast(str, os.getenv('BOT_TOKEN'))
 BOT_PROPERTIES: DefaultBotProperties = DefaultBotProperties(
     parse_mode=ParseMode.HTML,

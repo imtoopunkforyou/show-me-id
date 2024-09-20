@@ -23,12 +23,10 @@ VOLUME $VOLUME_PATH
 
 COPY ./smid/ $PROJECT_PATH
 
-WORKDIR $PROJECT_PATH
 RUN pip install poetry
-COPY pyproject.toml poetry.lock $PROJECT_PATH
-RUN poetry install --without dev --without lint --no-root
+COPY pyproject.toml poetry.lock $PROJECT_PATH/
+RUN cd $PROJECT_PATH/ && poetry install --without dev --without lint --no-root
 
-
-COPY entrypoint.sh ./
-RUN chmod +x ./entrypoint.sh
+COPY entrypoint.sh $PROJECT_PATH
+RUN chmod +x $PROJECT_PATH/entrypoint.sh
 ENTRYPOINT $PROJECT_PATH/entrypoint.sh
