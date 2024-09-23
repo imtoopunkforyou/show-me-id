@@ -3,3 +3,4 @@
 ### TODO
 - Readme.md
 - Tests
+- Rename repo to smid 
