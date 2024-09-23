@@ -1,0 +1,17 @@
+services:
+  smid:
+    build: .
+    ports:
+      - "8102:8102"
+    env_file:
+      - .env
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./
+          target: /src
+        - action: rebuild
+          path: pyproject.toml
+        - action: rebuild
+          path: poetry.lock

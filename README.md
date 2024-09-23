@@ -5,5 +5,7 @@
 - docker, docker compose
 - Makefile
 
-<code> docker build . --tag temp_smid && docker run --env-file .env temp_smid</code>
+<code>
+docker build . --tag temp_smid && docker run --env-file .env temp_smid
+</code>
 

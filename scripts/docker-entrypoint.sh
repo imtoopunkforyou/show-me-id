@@ -2,4 +2,6 @@
 echo '===================='
 echo 'Launching the bot...'
 echo '===================='
-python $PROJECT_PATH/__main__.py
+date
+echo '===================='
+python $PROJECT_PATH/smid/__main__.py
