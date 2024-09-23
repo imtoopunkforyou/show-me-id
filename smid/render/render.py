@@ -4,9 +4,9 @@ from typing import Optional, Union
 from config import RENDER_ENVIROMENT
 from dto.entity.public import AbstractPublicEntity
 from dto.entity.user import AbstractUser
-from exceptions.exceptions import RenderDTOError
 from jinja2 import Environment
 from jinja2.environment import Template
+from render.exceptions import RenderDTOError
 from render.types import FileNameLikeStr, HTMLikeStr, TemplateMessageKwargs
 
 
