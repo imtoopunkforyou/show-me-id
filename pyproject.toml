@@ -29,4 +29,4 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.nitpick]
-style = "https://raw.githubusercontent.com/imtoopunkforyou/itpfy-style/refs/heads/main/styles/imtoopunkforyou.toml"
+style = "https://raw.githubusercontent.com/imtoopunkforyou/itpfy-style/refs/heads/main/py/imtoopunkforyou.toml"
