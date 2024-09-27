@@ -4,3 +4,4 @@
 - Readme.md
 - Tests
 - Rename repo to smid 
+- Feature: add bot to private group if you want yo know gruup ID
