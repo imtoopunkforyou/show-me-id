@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "simple bot for demonstration Telegram ID"
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 authors = [
     "Timur Valiev <cptchunk@yandex.ru>"
