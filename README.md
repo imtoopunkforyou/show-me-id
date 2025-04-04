@@ -10,7 +10,7 @@ To do this, you first need to [register the bot and get its token](https://core.
 You will also need to install [Docker](https://docs.docker.com/get-started/).  
 Once you install Docker, you need to run three commands and your bot will be available.
 ```bash
-git clone https://github.com/imtoopunkforyou/show-me-id.git  # TODO TAG
+git clone --depth 1 --branch 0.1.1 https://github.com/imtoopunkforyou/show-me-id.git
 ```
 ```bash
 echo "BOT_TOKEN=<your_bot_token>" >> ./show-me-id/.env  
@@ -20,5 +20,5 @@ docker compose -f ./show-me-id/compose.yml up --build -d
 ```
 
 ## TODO
-- [ ] Readme.md
+- [x] Readme.md
 - [ ] Tests
