@@ -59,8 +59,8 @@ class MessageHTMLRender(AbstractHTMLRender):
     :raises RenderDTOError: Failed to create template object.
     """
 
-    _user_template_filename: str = 'user'
-    _public_entity_template_filename: str = 'public_entity'
+    user_template_filename: str = 'user'
+    public_entity_template_filename: str = 'public_entity'
 
     def __init__(self, dto: Union[AbstractUser, AbstractPublicEntity]):
         super().__init__(dto=dto)
@@ -78,7 +78,7 @@ class MessageHTMLRender(AbstractHTMLRender):
         template_kwargs: Optional[TemplateMessageKwargs] = None
 
         if self.is_user:
-            template = self._get_template_obj(self._user_template_filename)
+            template = self._get_template_obj(self.user_template_filename)
             template_kwargs = {
                 'id': self.dto.id,
                 'name': self.dto.full_name,  # type: ignore [union-attr]
@@ -87,7 +87,7 @@ class MessageHTMLRender(AbstractHTMLRender):
             }
         elif self.is_public_entity:
             template = self._get_template_obj(
-                self._public_entity_template_filename,
+                self.public_entity_template_filename,
             )
             template_kwargs = {
                 'id': self.dto.id,
@@ -123,7 +123,7 @@ class CommandHTMLRender(AbstractHTMLRender):
     :raises RenderDTOError: Failed to create template object.
     """
 
-    _start_template_filename: str = 'start'
+    start_template_filename: str = 'start'
 
     def __init__(
         self,
@@ -144,7 +144,7 @@ class CommandHTMLRender(AbstractHTMLRender):
         template_kwargs: Optional[TemplateMessageKwargs] = None
 
         if self.is_user:
-            template = self._get_template_obj(self._start_template_filename)
+            template = self._get_template_obj(self.start_template_filename)
             template_kwargs = {
                 'full_name': self.dto.full_name,  # type: ignore [union-attr]
             }

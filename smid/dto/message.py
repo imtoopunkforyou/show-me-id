@@ -117,10 +117,10 @@ class TelegramMessage(BaseTelegramMessage):
     :type BaseTelegramMessage: dto.base.BaseTelegramMessage
     """
 
-    _sender_user: Type[SenderUser] = SenderUser
-    _channel: Type[Channel] = Channel
-    _chat: Type[Chat] = Chat
-    _forward_user: Type[ForwardUser] = ForwardUser
+    sender_user: Type[SenderUser] = SenderUser
+    channel: Type[Channel] = Channel
+    chat: Type[Chat] = Chat
+    forward_user: Type[ForwardUser] = ForwardUser
 
     def __init__(self, message: OriginalMessage):
         super().__init__(message=message)
@@ -148,7 +148,7 @@ class TelegramMessage(BaseTelegramMessage):
     ) -> Union[AbstractPublicEntity, AbstractUser, None]:
         if self.is_forward_user():
             user: OriginalUser = self.message.forward_origin.sender_user  # type: ignore [union-attr]
-            return self._forward_user(
+            return self.forward_user(
                 id=user.id,
                 is_bot=user.is_bot,
                 first_name=user.first_name,
@@ -159,21 +159,21 @@ class TelegramMessage(BaseTelegramMessage):
 
         if self.is_chat():
             chat: OriginalChat = self.message.forward_origin.sender_chat  # type: ignore [union-attr]
-            return self._chat(
+            return self.chat(
                 id=chat.id,
                 title=chat.title,
             )
 
         if self.is_channel():
             channel: OriginalChat = self.message.forward_origin.chat  # type: ignore [union-attr]
-            return self._channel(
+            return self.channel(
                 id=channel.id,
                 title=channel.title,
             )
 
         if self.is_sender_user():
             original_user: OriginalUser = self.message.from_user  # type: ignore [assignment]
-            return self._sender_user(
+            return self.sender_user(
                 id=original_user.id,
                 is_bot=original_user.is_bot,
                 first_name=original_user.first_name,
