@@ -1,33 +1,36 @@
-[tool.poetry]
+[project]
 name = "show-me-id"
 version = "0.1.0"
 description = "simple bot for demonstration Telegram ID"
-license = "MIT"
+authors = [{ name = "Timur Valiev", email = "cptchunk@yandex.ru" }]
+requires-python = "==3.12.5"
 readme = "README.md"
-package-mode = false
-
-authors = [
-    "Timur Valiev <cptchunk@yandex.ru>"
+license = "MIT"
+dependencies = [
+    "aiogram==3.11.0",
+    "jinja2==3.1.4",
 ]
 
-[tool.poetry.dependencies]
-python = "3.12.5"
-aiogram = "==3.11.0"
-jinja2 = "==3.1.4"
+[dependency-groups]
+dev = [
+    "ipython>=8.26.0,<9",
+    "nitpick>=0.35.0,<0.36",
+]
+lint = [
+    "wemake-python-styleguide>=0.19.2,<0.20",
+    "mypy>=1.11.2,<2",
+]
 
-[tool.poetry.group.dev.dependencies]
-ipython = "^8.26.0"
-nitpick = "^0.35.0"
-
-[tool.poetry.group.lint.dependencies]
-wemake-python-styleguide = "^0.19.2"
-mypy = "^1.11.2"
-
+[tool.uv]
+package = false
+default-groups = [
+    "dev",
+    "lint",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.nitpick]
 style = "https://raw.githubusercontent.com/imtoopunkforyou/itpfy-style/refs/heads/main/py/imtoopunkforyou.toml"

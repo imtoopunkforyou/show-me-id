@@ -1,31 +1,32 @@
-FROM python:3.12.5-alpine
+ARG PYTHON_VERSION=3.12.5
+
+FROM python:${PYTHON_VERSION}-slim-bookworm
 
 LABEL maintainer="imtoopunkforyou"
 LABEL email="cptchunk@yandex.ru"
 LABEL homepage="https://github.com/imtoopunkforyou/show-me-id"
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=0
+RUN apt update -y && apt install -y \
+    bash \
+    curl \
+    && exit 0
 
-ENV PIP_ROOT_USER_ACTION=ignore
-ENV POETRY_VIRTUALENVS_CREATE=false
+ADD https://astral.sh/uv/install.sh /uv-installer.sh
+RUN bash /uv-installer.sh && rm /uv-installer.sh
 
+ENV PATH="/root/.local/bin/:$PATH"
+ENV UV_PYTHON_INSTALL_DIR=/python
+ENV UV_PYTHON_PREFERENCE=only-managed
 ENV PROJECT_PATH="/src"
 ENV SCRIPTS_PATH="$PROJECT_PATH/scripts"
 ENV ENTRYPOINT_FILE="$SCRIPTS_PATH/docker-entrypoint.sh"
 
-RUN apk update --no-cache && apk add --no-cache \
-    bash \
-    htop \
-    curl \
-    && exit 0
+RUN uv python install 3.12.5
 
-RUN mkdir -p $PROJECT_PATH
-COPY ./ $PROJECT_PATH
+RUN mkdir -p ${PROJECT_PATH}
+COPY ./ ${PROJECT_PATH}
 
-RUN pip install --upgrade pip
-RUN pip install poetry
-RUN cd $PROJECT_PATH/ && poetry install --without dev --without lint --no-root
+RUN chmod +x ${ENTRYPOINT_FILE}
+ENTRYPOINT ${ENTRYPOINT_FILE}
 
-RUN chmod +x $ENTRYPOINT_FILE
-ENTRYPOINT $ENTRYPOINT_FILE
+WORKDIR ${PROJECT_PATH}

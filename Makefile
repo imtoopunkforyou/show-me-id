@@ -25,9 +25,9 @@ logs-f:
 
 # === Dev ===
 lint:
-	flake8 ./smid && mypy ./smid --no-pretty
+	uv run flake8 ./smid && uv run mypy ./smid --no-pretty
 pre-commit:
-	isort ./smid && make lint
+	uv run isort ./smid && uv run make lint
 
 # === Aliases ===
 pc: pre-commit
